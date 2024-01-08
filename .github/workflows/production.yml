@@ -52,8 +52,22 @@ jobs:
     - name: Get branch name
       id: get_branch
       run: |
-        branch_name=$(git symbolic-ref --short HEAD)
-        echo "branch-name=$branch_name" >> $GITHUB_OUTPUT
+        if [[ "$GITHUB_REF" == "refs/heads/"* ]]; then
+          branch_name=$(git symbolic-ref --short HEAD)
+          echo "branch-name=$branch_name" >> $GITHUB_OUTPUT
+          exit 0
+        elif [[ "$GITHUB_REF" == "refs/tags/"* ]]; then
+          branches=$(git branch -r --contains tags/$GITHUB_REF_NAME)
+          for branch in $branches; do
+            if [[ $branch == "origin/main" ]]; then
+              echo "branch-name=main" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          done
+        fi
+
+        echo "::error::Failed to determine branch name"
+        exit 1
     
     outputs:
       branch-name: ${{ steps.get_branch.outputs.branch-name }}
