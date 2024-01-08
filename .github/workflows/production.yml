@@ -1,13 +1,12 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: Production
 
 on:
   push:
     branches: [ "main" ]
     tags: ["*.*.*"]
-  pull_request:
 
 env:
   DOTNET_NOLOGO: true
@@ -50,9 +49,20 @@ jobs:
           **/*.snupkg
           **/*.symbols.nupkg
 
+    - name: Get branch name
+      id: get_branch
+      run: echo "$(git symbolic-ref --short HEAD)" >> "$GITHUB_OUTPUT"
+    
+    outputs:
+      branch-name: ${{ steps.get_branch.outputs.branch-name }}
+
   publish:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: |
+      success() && (
+      github.event_name == 'push' && github.ref == 'refs/heads/main' ||
+      github.event_name == 'create' && github.ref_type == 'tag' && github.ref == 'refs/tags/*.*.*' && ${{ needs.build.outputs.branch-name }} == 'main'
+      )
     
     runs-on: ubuntu-latest
     environment:
