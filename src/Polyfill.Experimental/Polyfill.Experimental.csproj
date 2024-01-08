@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageDescription></PackageDescription>
+    <Authors></Authors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PolyPublic>true</PolyPublic>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- Hack for Azure DevOps Artifacts so pdb files can be included.
+         Remove when proper symbols support is implemented. -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="4.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Polyfill" Version="2.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="System.ValueTuple" Version="4.5.0"
+					  Condition="$(TargetFramework.StartsWith('net46'))" />
+
+    <PackageReference Include="System.Memory" Version="4.5.5"
+					  Condition="$(TargetFrameworkIdentifier) == '.NETStandard' or
+					             $(TargetFrameworkIdentifier) == '.NETFramework' or
+								       $(TargetFramework.StartsWith('netcoreapp2'))" />
+
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4"
+					  Condition="$(TargetFramework) == 'netstandard2.0' or
+					             $(TargetFramework) == 'netcoreapp2.0' or
+								       $(TargetFrameworkIdentifier) == '.NETFramework'" />
+  </ItemGroup>
+</Project>
