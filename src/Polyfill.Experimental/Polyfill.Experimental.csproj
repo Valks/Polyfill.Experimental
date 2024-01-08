@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageDescription></PackageDescription>
-    <Authors></Authors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
@@ -11,6 +9,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageDescription>Extra Polyfills for .netstandard</PackageDescription>
+    <Authors>Valk</Authors>
+    <RepositoryUrl>https://github.com/Valks/Polyfill.Experimental</RepositoryUrl>
+    
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
