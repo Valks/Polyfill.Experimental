@@ -6,8 +6,14 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    tags: ["*.*.*"]
   pull_request:
-    branches: [ "main" ]
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  
+  CONFIGURATION: "Release"
 
 jobs:
   build:
@@ -15,15 +21,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - run: dotnet --info
+    - run: git --version
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        filter: tree:0
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
 # TBD
 #    - name: Test
 #      run: dotnet test --no-build --verbosity normal
@@ -39,20 +53,24 @@ jobs:
   publish:
     needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
 
     steps:
-      - uses: actions/checkout@v3
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+      - run: dotnet --info
+      - run: git --version
+
       - name: Retrieve artifacts
         uses: actions/download-artifact@v2
         with:
           name: nugetArtifacts
-      - name: Publish to GitHub Packages
+
+      - name: Publish to MyGet Packages
         run: dotnet nuget push **/*.nupkg --source ${{ env.MYGET_SOURCE }} --api-key ${{ secrets.MYGET_TOKEN }}
