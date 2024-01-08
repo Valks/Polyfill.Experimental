@@ -12,7 +12,7 @@ on:
 env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  
+
   CONFIGURATION: "Release"
 
 jobs:
@@ -55,9 +55,8 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
+    environment:
+      name: production
 
     steps:
       - name: Setup .NET
@@ -73,4 +72,4 @@ jobs:
           name: nugetArtifacts
 
       - name: Publish to MyGet Packages
-        run: dotnet nuget push **/*.nupkg --source ${{ env.MYGET_SOURCE }} --api-key ${{ secrets.MYGET_TOKEN }}
+        run: dotnet nuget push **/*.nupkg --source ${{ vars.MYGET_SOURCE }} --api-key ${{ secrets.MYGET_TOKEN }}
