@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  NUGET_SOURCE_URL: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+
 jobs:
   build:
 
@@ -55,6 +58,4 @@ jobs:
         with:
           name: nugetArtifacts
       - name: Publish to GitHub Packages
-        run: dotnet nuget push **/*.nupkg --source "github"
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: dotnet nuget push **/*.nupkg --source ${{ env.NUGET_SOURCE_URL }}
