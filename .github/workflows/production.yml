@@ -51,7 +51,9 @@ jobs:
 
     - name: Get branch name
       id: get_branch
-      run: echo "$(git symbolic-ref --short HEAD)" >> "$GITHUB_OUTPUT"
+      run: |
+        branch_name=$(git symbolic-ref --short HEAD)
+        echo "branch-name=$branch_name" >> $GITHUB_OUTPUT
     
     outputs:
       branch-name: ${{ steps.get_branch.outputs.branch-name }}
