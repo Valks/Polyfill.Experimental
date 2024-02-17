@@ -28,9 +28,6 @@ jobs:
     - run: git --version
 
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 1
-        filter: tree:0
 
     - name: Restore dependencies
       run: dotnet restore
