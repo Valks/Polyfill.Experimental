@@ -12,6 +12,9 @@
     <PackageDescription>Extra Polyfills for .netstandard</PackageDescription>
     <Authors>Valk</Authors>
     <RepositoryUrl>https://github.com/Valks/Polyfill.Experimental</RepositoryUrl>
+    <PackageRepositoryUrl>https://github.com/Valks/Polyfill.Experimental</PackageRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
     
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -37,22 +40,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polyfill" Version="2.0.0">
+    <PackageReference Include="Polyfill" Version="2.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="System.ValueTuple" Version="4.5.0"
+    <PackageReference Include="System.ValueTuple"
+					  Version="4.5.0"
 					  Condition="$(TargetFramework.StartsWith('net46'))" />
 
-    <PackageReference Include="System.Memory" Version="4.5.5"
+    <PackageReference Include="System.Memory"
+					  Version="4.5.5"
 					  Condition="$(TargetFrameworkIdentifier) == '.NETStandard' or
-					             $(TargetFrameworkIdentifier) == '.NETFramework' or
-								       $(TargetFramework.StartsWith('netcoreapp2'))" />
+                                 $(TargetFrameworkIdentifier) == '.NETFramework' or
+                                 $(TargetFramework.StartsWith('netcoreapp2'))" />
 
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4"
+    <PackageReference Include="System.Threading.Tasks.Extensions"
+					  Version="4.5.4"
 					  Condition="$(TargetFramework) == 'netstandard2.0' or
-					             $(TargetFramework) == 'netcoreapp2.0' or
-								       $(TargetFrameworkIdentifier) == '.NETFramework'" />
+                                 $(TargetFramework) == 'netcoreapp2.0' or
+                                 $(TargetFrameworkIdentifier) == '.NETFramework'" />
   </ItemGroup>
 </Project>
